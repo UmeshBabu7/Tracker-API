@@ -99,7 +99,7 @@ Response:
 {
   "id": 2,
   "title": "Salary Payment",
-  "description": Salary Payment,
+  "description": "Salary Payment",
   "amount": 1000.00,
   "transaction_type": "credit",
   "tax": 15.00,
