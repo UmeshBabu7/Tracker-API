@@ -16,7 +16,7 @@ A RESTful API for tracking personal expenses and income, with JWT authentication
 - Django REST Framework
 - djangorestframework-simplejwt
 - SQLite (development)
-- Python 3.8+
+- Python 
 
 ## Setup Instructions
 
