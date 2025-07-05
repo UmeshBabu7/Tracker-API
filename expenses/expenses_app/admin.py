@@ -16,6 +16,6 @@ class ExpenseIncomeAdmin(admin.ModelAdmin):
         'created_at',
         'updated_at'
     )
-    list_filter = ('transaction_type', 'tax_type', 'created_at','updated_at')
-    search_fields = ('title', 'description', 'user__username')
-    readonly_fields = ('total', 'created_at', 'updated_at')
+    # list_filter = ('transaction_type', 'tax_type', 'created_at','updated_at')
+    # search_fields = ('title', 'description', 'user__username')
+    # readonly_fields = ('total', 'created_at', 'updated_at')

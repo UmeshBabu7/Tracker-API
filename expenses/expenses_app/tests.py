@@ -8,29 +8,29 @@ from rest_framework_simplejwt.tokens import RefreshToken
 class AuthTests(APITestCase):
     def test_user_registration(self):
         url = reverse('register')
-        data = {'username': 'testuser', 'password': 'testpass123'}
+        data = {'username': 'umesh', 'password': 'umesh@@@1234567'}
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertTrue(User.objects.filter(username='testuser').exists())
+        self.assertTrue(User.objects.filter(username='umesh').exists())
 
     def test_duplicate_registration(self):
-        User.objects.create_user(username='testuser', password='testpass123')
+        User.objects.create_user(username='hello', password='hello@@@1234567')
         url = reverse('register')
-        data = {'username': 'testuser', 'password': 'testpass123'}
+        data = {'username': 'hello', 'password': 'hello@@@1234567'}
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_login_and_token(self):
-        User.objects.create_user(username='testuser', password='testpass123')
+        User.objects.create_user(username='umesh', password='umesh@@@1234567')
         url = reverse('token_obtain_pair')
-        data = {'username': 'testuser', 'password': 'testpass123'}
+        data = {'username': 'umesh', 'password': 'umesh@@@1234567'}
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertIn('access', response.data)
         self.assertIn('refresh', response.data)
 
     def test_token_refresh(self):
-        user = User.objects.create_user(username='testuser', password='testpass123')
+        user = User.objects.create_user(username='umesh', password='umesh@@@1234567')
         refresh = RefreshToken.for_user(user)
         url = reverse('token_refresh')
         response = self.client.post(url, {'refresh': str(refresh)})
@@ -39,13 +39,13 @@ class AuthTests(APITestCase):
 
 class ExpenseIncomeTests(APITestCase):
     def setUp(self):
-        self.user = User.objects.create_user(username='user1', password='pass1')
-        self.user2 = User.objects.create_user(username='user2', password='pass2')
-        self.superuser = User.objects.create_superuser(username='admin', password='adminpass')
+        self.user = User.objects.create_user(username='arun', password='arun@@@1234567')
+        self.user2 = User.objects.create_user(username='bibek', password='bibek@@@1234567')
+        self.superuser = User.objects.create_superuser(username='umesh', password='umesh@@@1234567')
         url = reverse('token_obtain_pair')
-        self.user_token = self.client.post(url, {'username': 'user1', 'password': 'pass1'}).data['access']
-        self.user2_token = self.client.post(url, {'username': 'user2', 'password': 'pass2'}).data['access']
-        self.admin_token = self.client.post(url, {'username': 'admin', 'password': 'adminpass'}).data['access']
+        self.user_token = self.client.post(url, {'username': 'arun', 'password': 'arun@@@1234567'}).data['access']
+        self.user2_token = self.client.post(url, {'username': 'bibek', 'password': 'bibek@@@1234567'}).data['access']
+        self.admin_token = self.client.post(url, {'username': 'umesh', 'password': 'umesh@@@1234567'}).data['access']
 
     def auth(self, token):
         self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {token}')
@@ -54,7 +54,7 @@ class ExpenseIncomeTests(APITestCase):
         self.auth(self.user_token)
         url = reverse('expenseincome-list')
         data = {
-            'title': 'Grocery',
+            'title': 'Salary Payment',
             'amount': 100,
             'transaction_type': 'debit',
             'tax': 10,
@@ -68,9 +68,9 @@ class ExpenseIncomeTests(APITestCase):
         self.auth(self.user_token)
         url = reverse('expenseincome-list')
         data = {
-            'title': 'Salary',
+            'title': 'Coffee',
             'amount': 100,
-            'transaction_type': 'credit',
+            'transaction_type': 'debit',
             'tax': 10,
             'tax_type': 'percentage',
         }
