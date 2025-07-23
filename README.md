@@ -1,5 +1,5 @@
 
-# Django Expense Tracker API (Django Rest Framework)
+# Django Expense Tracker API 
 
 A RESTful API for tracking personal expenses and income, with JWT authentication and user access control.
 
