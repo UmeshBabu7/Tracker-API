@@ -73,7 +73,7 @@ A comprehensive RESTful API for tracking personal expenses and income, featuring
 
 ## Advanced API Features
 
-### 🎨 Renderers
+### Renderers
 The API supports multiple response formats:
 
 - **JSON Renderer** (`application/json`): Standard JSON responses
@@ -86,7 +86,7 @@ GET /api/expenses/
 Accept: application/json
 ```
 
-### 📥 Parsers
+### Parsers
 The API accepts multiple input formats:
 
 - **JSON Parser** (`application/json`): JSON request bodies
@@ -104,7 +104,7 @@ Content-Type: application/json
 }
 ```
 
-### 🚦 Throttling
+### Throttling
 Rate limiting to prevent abuse:
 
 - **Anonymous users**: 100 requests per hour
@@ -124,7 +124,7 @@ X-RateLimit-Reset: 1640995200
 }
 ```
 
-### 🔍 Filtering
+### Filtering
 Filter expenses by specific criteria:
 
 **Available filters:**
@@ -141,7 +141,7 @@ GET /api/expenses/?created_at__gte=2024-01-01&created_at__lte=2024-01-31
 GET /api/expenses/?transaction_type=credit&tax_type=flat
 ```
 
-### 🔎 Searching
+### Searching
 Full-text search across expense data:
 
 **Searchable fields:**
@@ -155,7 +155,7 @@ GET /api/expenses/?search=rent payment
 GET /api/expenses/?search=monthly groceries
 ```
 
-### 📊 Ordering
+### Ordering
 Sort expenses by various fields:
 
 **Orderable fields:**
@@ -172,7 +172,7 @@ GET /api/expenses/?ordering=-created_at     # Newest first
 GET /api/expenses/?ordering=title          # Alphabetical
 ```
 
-### 🔄 Combined Features
+### Combined Features
 Use multiple features together:
 
 ```http
