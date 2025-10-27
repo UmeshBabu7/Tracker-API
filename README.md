@@ -1,7 +1,7 @@
 
 # Django Expense Tracker API 
 
-A comprehensive RESTful API for tracking personal expenses and income, featuring advanced Django REST Framework capabilities including JWT authentication, caching, filtering, searching, ordering, throttling, and multiple renderers/parsers.
+A comprehensive RESTful API for tracking personal expenses and income, featuring advanced Django REST Framework capabilities including JWT authentication, filtering, searching, ordering, throttling, and multiple renderers/parsers.
 
 ## Features
 - **Authentication & Authorization**
@@ -22,13 +22,11 @@ A comprehensive RESTful API for tracking personal expenses and income, featuring
   - **Filtering**: Filter by transaction type, tax type, dates
   - **Searching**: Full-text search across title and description
   - **Ordering**: Sort by amount, date, title
-  - **Caching**: Redis-based caching for improved performance
 
 ## Technologies
 - **Backend**: Django 5.2.4, Django REST Framework 3.16.0
 - **Authentication**: djangorestframework-simplejwt 5.5.0
 - **Database**: SQLite (development)
-- **Caching**: Redis with django-redis
 - **Filtering**: django-filter
 - **Language**: Python 3.12 
 
@@ -46,38 +44,15 @@ A comprehensive RESTful API for tracking personal expenses and income, featuring
    ```
    pip install -r requirements.txt
    ```
-4. **Install and start Redis**
-   
-   **Ubuntu/Debian:**
-   ```bash
-   sudo apt-get install redis-server
-   sudo systemctl start redis-server
-   ```
-   
-   **macOS:**
-   ```bash
-   brew install redis
-   brew services start redis
-   ```
-   
-   **Windows:**
-   - Download Redis from [redis.io](https://redis.io/download)
-   - Extract and run `redis-server.exe`
-   
-   **Verify Redis is running:**
-   ```bash
-   redis-cli ping
-   # Should return: PONG
-   ```
-5. **Apply migrations**
+4. **Apply migrations**
    ```
    python manage.py migrate
    ```
-6. **Create a superuser (optional, for admin access)**
+5. **Create a superuser (optional, for admin access)**
    ```
    python manage.py createsuperuser
    ```
-7. **Run the development server**
+6. **Run the development server**
    ```sh
    python manage.py runserver
    ```
@@ -197,20 +172,6 @@ GET /api/expenses/?ordering=-created_at     # Newest first
 GET /api/expenses/?ordering=title          # Alphabetical
 ```
 
-### 💾 Caching
-Redis-based caching for improved performance:
-
-**Cache features:**
-- **Query-level caching**: User-specific expense queries cached for 15 minutes
-- **View-level caching**: List view responses cached for 15 minutes
-- **Automatic invalidation**: Cache cleared on create/update/delete operations
-- **User-specific**: Different cache for different users
-
-**Performance improvement:**
-- **Without cache**: 200-500ms response time
-- **With cache**: 5-20ms response time
-- **Improvement**: 10-100x faster
-
 ### 🔄 Combined Features
 Use multiple features together:
 
@@ -222,7 +183,6 @@ This request will:
 1. Filter for debit transactions
 2. Search for "coffee" in title/description
 3. Sort by amount (highest first)
-4. Return cached results if available
 
 ## Sample API Requests
 
@@ -431,82 +391,34 @@ GET {{base_url}}/api/expenses/?ordering=-created_at
 Authorization: Bearer {{jwt_token}}
 ```
 
-#### 9. Testing Caching
-**First Request (Database Hit):**
-```http
-GET {{base_url}}/api/expenses/
-Authorization: Bearer {{jwt_token}}
-# Note response time
-```
-
-**Second Request (Cache Hit):**
-```http
-GET {{base_url}}/api/expenses/
-Authorization: Bearer {{jwt_token}}
-# Should be much faster
-```
-
-**Test Cache Invalidation:**
-```http
-POST {{base_url}}/api/expenses/
-Content-Type: application/json
-Authorization: Bearer {{jwt_token}}
-{
-  "title": "New Expense",
-  "amount": "10.00",
-  "transaction_type": "debit"
-}
-
-GET {{base_url}}/api/expenses/
-Authorization: Bearer {{jwt_token}}
-# Should include new expense (cache cleared)
-```
-
-#### 10. Combined Features Testing
+#### 9. Combined Features Testing
 ```http
 GET {{base_url}}/api/expenses/?transaction_type=debit&search=coffee&ordering=-amount
 Authorization: Bearer {{jwt_token}}
 ```
 
 ### Performance Testing
-- **Response Time**: Monitor response times with and without cache
+- **Response Time**: Monitor response times
 - **Load Testing**: Use Postman Collection Runner with 100+ iterations
-- **Memory Usage**: Monitor Redis memory usage during testing
 
 ## Troubleshooting
 
 ### Common Issues
 
-#### 1. Redis Connection Error
-**Error:** `redis.exceptions.ConnectionError`
-**Solution:**
-- Ensure Redis is running: `redis-cli ping`
-- Check Redis configuration in settings.py
-- Verify Redis is accessible on localhost:6379
-
-#### 2. Throttling Not Working
+#### 1. Throttling Not Working
 **Error:** No throttling response
 **Solution:**
-- Check Redis is running and accessible
 - Verify throttling settings in settings.py
 - Ensure you're hitting the rate limit (100/hour for anonymous, 1000/hour for authenticated)
 
-#### 3. Caching Not Working
-**Error:** No performance improvement
-**Solution:**
-- Check Redis is running
-- Verify cache configuration in settings.py
-- Check cache keys are being set in views.py
-- Monitor Redis memory usage
-
-#### 4. Filtering Not Working
+#### 2. Filtering Not Working
 **Error:** Filters not applied
 **Solution:**
 - Check filter field names match model fields
 - Verify django-filter is installed
 - Check filter_backends configuration in views.py
 
-#### 5. Authentication Issues
+#### 3. Authentication Issues
 **Error:** 401 Unauthorized
 **Solution:**
 - Verify JWT token is valid and not expired
@@ -515,19 +427,8 @@ Authorization: Bearer {{jwt_token}}
 
 ### Performance Monitoring
 
-#### Redis Memory Usage
-```bash
-redis-cli info memory
-```
-
-#### Cache Hit Rate
-```bash
-redis-cli info stats
-```
-
 #### API Response Times
 - Monitor response times in Postman
-- Check for caching effectiveness
 - Verify throttling is working
 
 ## Dependencies
@@ -542,13 +443,10 @@ PyJWT==2.9.0
 sqlparse==0.5.3
 tzdata==2025.2
 django-filter==24.2
-django-redis==5.4.0
-redis==5.0.1
 ```
 
 ### System Requirements
 - Python 3.12+
-- Redis Server
 - SQLite (development)
 - Virtual Environment (recommended)
 
@@ -556,9 +454,7 @@ redis==5.0.1
 - **Security**: Regular users can only access their own records
 - **Admin Access**: Superusers can access all records
 - **Authentication**: All endpoints require JWT authentication except registration and login
-- **Performance**: Redis caching provides 10-100x performance improvement
 - **Rate Limiting**: Anonymous users limited to 100 requests/hour, authenticated users to 1000 requests/hour
-- **Caching**: User-specific caching with automatic invalidation on data changes
 - **Filtering**: Supports filtering by transaction type, tax type, and date ranges
 - **Searching**: Full-text search across title and description fields
 - **Ordering**: Sort by amount, date, or title in ascending/descending order

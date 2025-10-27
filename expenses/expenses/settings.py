@@ -153,21 +153,4 @@ REST_FRAMEWORK = {
         'rest_framework.filters.SearchFilter',
         'rest_framework.filters.OrderingFilter',
     ],
-    
-    # Caching
-    'DEFAULT_CACHE_RESPONSE_TIMEOUT': 60 * 15,  # 15 minutes
 }
-
-# Caching Configuration
-CACHES = {
-    'default': {
-        'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': 'redis://127.0.0.1:6379/1',
-        'OPTIONS': {
-            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
-        }
-    }
-}
-
-# Cache timeout settings
-CACHE_TTL = 60 * 15  # 15 minutes
